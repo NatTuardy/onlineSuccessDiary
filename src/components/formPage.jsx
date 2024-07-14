@@ -50,7 +50,7 @@ const FormPage = () => {
 
   const handleClose = () => {
     setExistAlert(false);
-    navigate("/onlineSuccessDiary/days");
+    navigate("/days");
   };
 
   const handleSubmit = (data) => {
@@ -66,7 +66,7 @@ const FormPage = () => {
           JSON.stringify(data)
         );
       }
-      navigate("/onlineSuccessDiary/days");
+      navigate("/days");
     }
   };
 
