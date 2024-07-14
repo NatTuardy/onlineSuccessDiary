@@ -44,7 +44,7 @@ const DaysPage = () => {
       : "Заповни свої успіхи за сьогодні";
   };
   const handleClickButton = () => {
-    navigate("/");
+    navigate("/onlineSuccessDiary/");
   };
   const listDays = daysDiary.map((day, i) => (
     <li className=" mt-3" key={i}>
