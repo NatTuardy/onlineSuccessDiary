@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="container mt-5">
       <Routes>
-        <Route path="/" element={<FormPage />} />
-        <Route path="/days" element={<DaysPage />} />
+        <Route path="onlineSuccessDiary/" element={<FormPage />} />
+        <Route path="onlineSuccessDiary/days" element={<DaysPage />} />
       </Routes>
     </div>
   );
