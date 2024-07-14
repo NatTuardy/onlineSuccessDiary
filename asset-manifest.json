@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/onlineSuccessDiary/static/css/main.5cda0474.css",
-    "main.js": "/onlineSuccessDiary/static/js/main.bfc126eb.js",
+    "main.js": "/onlineSuccessDiary/static/js/main.c5f1701c.js",
     "static/media/bg-white.jpg": "/onlineSuccessDiary/static/media/bg-white.9d339d2cd932f507fbca.jpg",
     "index.html": "/onlineSuccessDiary/index.html",
     "main.5cda0474.css.map": "/onlineSuccessDiary/static/css/main.5cda0474.css.map",
-    "main.bfc126eb.js.map": "/onlineSuccessDiary/static/js/main.bfc126eb.js.map"
+    "main.c5f1701c.js.map": "/onlineSuccessDiary/static/js/main.c5f1701c.js.map"
   },
   "entrypoints": [
     "static/css/main.5cda0474.css",
-    "static/js/main.bfc126eb.js"
+    "static/js/main.c5f1701c.js"
   ]
 }
