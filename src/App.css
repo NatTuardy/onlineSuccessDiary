@@ -1,6 +1,13 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
 .App {
   text-align: center;
 }
+
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +42,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.container {
+  background-color: white;
 }

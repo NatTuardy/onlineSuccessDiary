@@ -1,11 +1,15 @@
-// import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-
+import DaysPage from "./components/daysPage";
+import FormPage from "./components/formPage";
 
 function App() {
   return (
-    <div>
-      <h1>Щоденник твоїх успіхів!</h1>
+    <div className="container mt-5">
+      <Routes>
+        <Route path="/" element={<FormPage />} />
+        <Route path="/days" element={<DaysPage />} />
+      </Routes>
     </div>
   );
 }
