@@ -14,6 +14,21 @@ body {
   text-align: left;
 }
 
+/* В вашем CSS файле */
+ul {
+  list-style: none;
+  padding-left: 0; /* Убираем отступ */
+}
+
+.icons i {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.icons i:hover {
+  color: red; /* Например, при наведении можно менять цвет */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

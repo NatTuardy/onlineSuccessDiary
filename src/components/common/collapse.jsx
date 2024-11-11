@@ -11,7 +11,7 @@ const CollapseWrapper = ({ children, title, name }) => {
         const newCollapse = new BsCollapse(collapseRef.current, {
             toggle: false
         });
-        display ? newCollapse.show() : newCollapse.hide();
+        display ? newCollapse.hide() : newCollapse.show();
     }, [display]);
 
     return (

@@ -17,15 +17,27 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
         <div className="mb-4">
             <label htmlFor={name}> {label}</label>
             <div className="input-group has-validation">
-                <input
-                    type={showPassword ? "text" : type}
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={handleChange}
-                    className={getInputClasses()}
-                    {...rest}
-                />
+            {type === "textarea" ? (
+                    <textarea
+                        id={name}
+                        name={name}
+                        value={value}
+                        onChange={handleChange}
+                        className={getInputClasses()}
+                        rows="3"  // Задаем количество строк для textarea (можно изменить)
+                        {...rest}
+                    />
+                ) : (
+                    <input
+                        type={showPassword && type === "password" ? "text" : type}
+                        id={name}
+                        name={name}
+                        value={value}
+                        onChange={handleChange}
+                        className={getInputClasses()}
+                        {...rest}
+                    />
+                )}
 
                 {type === "password" && (
                     <button
@@ -46,7 +58,7 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
     );
 };
 TextField.defaultProps = {
-    type: "text"
+    type: "textarea"
 };
 TextField.propTypes = {
     label: PropTypes.string,

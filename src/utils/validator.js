@@ -1,4 +1,4 @@
-export function validator(data, config) {
+export function validator(data, validatorConfig) {
     const errors = {};
     function validate(validateMethod, data, config) {
         let statusValidate;
@@ -35,17 +35,19 @@ export function validator(data, config) {
         }
         if (statusValidate) return config.message;
     }
-    for (const fieldName in data) {
-        for (const validateMethod in config[fieldName]) {
-            const error = validate(
-                validateMethod,
-                data[fieldName],
-                config[fieldName][validateMethod]
-            );
-            if (error && !errors[fieldName]) {
+
+    // Проверяем как по данным, так и по конфигу валидации
+    for (const fieldName in validatorConfig) {
+        const fieldValue = data[fieldName] || "";  // Если поле отсутствует в data, считаем его пустым
+        const config = validatorConfig[fieldName];
+
+        for (const validateMethod in config) {
+            const error = validate(validateMethod, fieldValue, config[validateMethod]);
+            if (error) {
                 errors[fieldName] = error;
             }
         }
     }
+
     return errors;
 }
