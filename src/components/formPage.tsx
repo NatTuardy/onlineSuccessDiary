@@ -45,18 +45,18 @@ const FormPage = () => {
 
   useEffect(() => {
     const savedDays = [];
-   // Перебираем все ключи в localStorage
-   for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
+    // Перебираем все ключи в localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
 
-    // Отбираем только те ключи, которые начинаются с 'day' и имеют дату
-    if (key.startsWith("day") && /\d{8}/.test(key.replace("day", ""))) {
-      const savedDay = JSON.parse(window.localStorage.getItem(key));
-      if (savedDay) {
-        savedDays.push(savedDay);
+      // Отбираем только те ключи, которые начинаются с 'day' и имеют дату
+      if (key.startsWith("day") && /\d{8}/.test(key.replace("day", ""))) {
+        const savedDay = JSON.parse(window.localStorage.getItem(key));
+        if (savedDay) {
+          savedDays.push(savedDay);
+        }
       }
     }
-  }
     setDaysDiary(savedDays);
   }, []);
 
@@ -66,9 +66,9 @@ const FormPage = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const updateValidationConfig = ( additionalFieldsCount) => {
+  const updateValidationConfig = (additionalFieldsCount) => {
     const newValidatorConfig = { ...validationConfig }; // Базовый конфиг для обязательных полей
-  
+
     // Добавляем правила для обязательных полей успехов (1-5)
     for (let i = 1; i <= 5; i++) {
       newValidatorConfig[`successes${i}`] = {
@@ -77,7 +77,7 @@ const FormPage = () => {
         },
       };
     }
-  
+
     // Добавляем правила для дополнительных полей успехов
     for (let i = 1; i <= additionalFieldsCount; i++) {
       const fieldName = `additionalSuccess${i}`;
@@ -87,12 +87,11 @@ const FormPage = () => {
         },
       };
     }
-  
+
     // Обновляем состояние validatorConfig
     setValidatorConfig(newValidatorConfig);
   };
 
- 
   useEffect(() => {
     // Проверяем, есть ли данные для редактирования
     if (dayToEdit && Object.keys(dayToEdit).length > 0) {
@@ -101,20 +100,19 @@ const FormPage = () => {
         key.startsWith("additionalSuccess")
       );
 
-    setAdditionalInputs(
-      additionalSuccesses.map((success, index) => ({
-        label: `Успіх ${index + 6}`,
-        value: dayToEdit[success],
-      }))
-    );
-          // Обновляем данные для всех полей (основные и дополнительные успехи)
-    const updatedData = { ...data, ...dayToEdit };
-    setData(updatedData);
-    // Обновляем валидацию для всех полей, включая дополнительные
-    updateValidationConfig(additionalSuccesses.length);
-    setUpdatedDay(true)
+      setAdditionalInputs(
+        additionalSuccesses.map((success, index) => ({
+          label: `Успіх ${index + 6}`,
+          value: dayToEdit[success],
+        }))
+      );
+      // Обновляем данные для всех полей (основные и дополнительные успехи)
+      const updatedData = { ...data, ...dayToEdit };
+      setData(updatedData);
+      // Обновляем валидацию для всех полей, включая дополнительные
+      updateValidationConfig(additionalSuccesses.length);
+      setUpdatedDay(true);
     }
-    
   }, [dayToEdit]); // Этот useEffect срабатывает при изменении dayToEdit и длины additionalInputs
 
   const handleChange = ({ name, value }) => {
@@ -123,26 +121,28 @@ const FormPage = () => {
       ...prevState,
       [name]: value,
     }));
-  
+
     // 2. Отмечаем текущее поле как "тронутое"
     setTouched((prevState) => ({
       ...prevState,
       [name]: true,
     }));
-  
+
     // 3.   Перезапускаем валидацию для измененного поля
-  const updatedErrors = validator(
-    { ...data, [name]: value },
-    {
-      ...validatorConfig,
-      [name]: {
-        isRequired: {
-          message: validationConfig[name] ? validationConfig[name].isRequired.message : 'Заповніть це поле', // Используем сообщение из validationConfig для обязательных полей и кастомное для дополнительных
+    const updatedErrors = validator(
+      { ...data, [name]: value },
+      {
+        ...validatorConfig,
+        [name]: {
+          isRequired: {
+            message: validationConfig[name]
+              ? validationConfig[name].isRequired.message
+              : "Заповніть це поле", // Используем сообщение из validationConfig для обязательных полей и кастомное для дополнительных
+          },
         },
-      },
-    }
-  );
-  
+      }
+    );
+
     // 4. Проверяем только предыдущие обязательные поля
     const fieldOrder = [
       "successes1",
@@ -151,9 +151,9 @@ const FormPage = () => {
       "successes4",
       "successes5",
     ];
-  
+
     const currentFieldIndex = fieldOrder.indexOf(name);
-  
+
     if (currentFieldIndex > 0) {
       for (let i = 0; i < currentFieldIndex; i++) {
         const field = fieldOrder[i];
@@ -166,16 +166,16 @@ const FormPage = () => {
         }
       }
     }
-  
-     // 5. Если поле — это дополнительный импут, обновляем валидацию через updateValidationConfig
-  if (name.startsWith("additionalSuccess")) {
-    const additionalFieldsCount = Object.keys(data).filter((key) =>
-      key.startsWith("additionalSuccess")
-    ).length;
 
-    updateValidationConfig(additionalFieldsCount); // Обновляем конфигурацию валидации
-  }
-  
+    // 5. Если поле — это дополнительный импут, обновляем валидацию через updateValidationConfig
+    if (name.startsWith("additionalSuccess")) {
+      const additionalFieldsCount = Object.keys(data).filter((key) =>
+        key.startsWith("additionalSuccess")
+      ).length;
+
+      updateValidationConfig(additionalFieldsCount); // Обновляем конфигурацию валидации
+    }
+
     // 6. Обновляем состояние ошибок
     setErrors(updatedErrors);
   };
@@ -210,13 +210,13 @@ const FormPage = () => {
       updatedDays[existingDayIndex] = data;
       setDaysDiary(updatedDays); // Обновляем состояние списка дней
       window.localStorage.setItem(uniqueDayKey, JSON.stringify(data)); // Обновляем в localStorage
-      setUpdatedDay(false)
+      setUpdatedDay(false);
     } else {
       // Если это новый день
       const findDoubleDay = daysDiary.find(
         (day) => day.dateNow === data.dateNow
       );
- 
+
       if (findDoubleDay) {
         setExistAlert(true);
         return;
@@ -252,62 +252,61 @@ const FormPage = () => {
       }
     }
 
-      // 2. Проверяем все существующие дополнительные импуты
-  const allAdditionalFieldsValid = additionalInputs.every((_, index) => {
-    const fieldName = `additionalSuccess${index + 1}`;
-    return data[fieldName]?.trim(); // Проверяем, заполнено ли поле
-  });
-
-  if (!allAdditionalFieldsValid) {
-    // Если хотя бы одно поле пустое, показываем ошибку и прерываем создание
-    const updatedErrors = additionalInputs.reduce((acc, _, index) => {
+    // 2. Проверяем все существующие дополнительные импуты
+    const allAdditionalFieldsValid = additionalInputs.every((_, index) => {
       const fieldName = `additionalSuccess${index + 1}`;
-      if (!data[fieldName]?.trim()) {
-        acc[fieldName] = "Заповніть це поле"; // Устанавливаем ошибку для незаполненного поля
-        setTouched((prevState) => ({
-          ...prevState,
-          [fieldName]: true,
-        }));
-      }
-      return acc;
-    }, {});
+      return data[fieldName]?.trim(); // Проверяем, заполнено ли поле
+    });
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      ...updatedErrors,
-    }));
+    if (!allAdditionalFieldsValid) {
+      // Если хотя бы одно поле пустое, показываем ошибку и прерываем создание
+      const updatedErrors = additionalInputs.reduce((acc, _, index) => {
+        const fieldName = `additionalSuccess${index + 1}`;
+        if (!data[fieldName]?.trim()) {
+          acc[fieldName] = "Заповніть це поле"; // Устанавливаем ошибку для незаполненного поля
+          setTouched((prevState) => ({
+            ...prevState,
+            [fieldName]: true,
+          }));
+        }
+        return acc;
+      }, {});
 
-    return; // Прерываем создание нового импута
-  }
-  
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...updatedErrors,
+      }));
+
+      return; // Прерываем создание нового импута
+    }
+
     // 3. Если нет незаполненных дополнительных импутов — создаем новый
     const newInputIndex = additionalInputs.length + 1;
     const newFieldName = `additionalSuccess${newInputIndex}`;
     const newLabel = `Успіх ${newInputIndex + 5}`;
     console.log("newLabel", newLabel);
-  
+
     // Обновляем данные формы (новый импут)
     setAdditionalInputs((prevState) => [
       ...prevState,
       { label: newLabel, value: "" },
     ]);
-  
+
     // Добавляем новое поле в данные формы
     setData((prevState) => ({
       ...prevState,
       [newFieldName]: "",
     }));
-  
+
     // Используем функцию updateValidationConfig для обновления валидации
     updateValidationConfig(additionalInputs.length + 1); // Передаем обновленное количество полей
-  
+
     // Устанавливаем, что новое поле не "тронуто"
     setTouched((prevState) => ({
       ...prevState,
       [newFieldName]: false,
     }));
   };
-
 
   const handleDeleteAdditionalInput = (indexToDelete) => {
     // 1. Удаляем импут из additionalInputs и пересчитываем лейблы
@@ -317,39 +316,43 @@ const FormPage = () => {
         ...input,
         label: `Успіх ${index + 6}`, // Обновляем лейблы, начиная с Успіх 6
       }));
-  
+
     // 2. Обновляем данные формы (data)
     const newData = {};
     Object.keys(data).forEach((key) => {
       if (key.startsWith("additionalSuccess")) {
-        const fieldIndex = parseInt(key.replace("additionalSuccess", ""), 10) - 1;
-  
+        const fieldIndex =
+          parseInt(key.replace("additionalSuccess", ""), 10) - 1;
+
         if (fieldIndex !== indexToDelete) {
-          const newIndex = fieldIndex > indexToDelete ? fieldIndex - 1 : fieldIndex;
+          const newIndex =
+            fieldIndex > indexToDelete ? fieldIndex - 1 : fieldIndex;
           newData[`additionalSuccess${newIndex + 1}`] = data[key]; // Переносим данные в новое поле
         }
       } else {
         newData[key] = data[key]; // Копируем остальные данные
       }
     });
-  
+
     // 3. Обновляем ошибки для оставшихся полей
     const updatedErrors = {};
     Object.keys(errors).forEach((key) => {
       if (!key.startsWith("additionalSuccess")) {
         updatedErrors[key] = errors[key]; // Копируем ошибки для обязательных полей
       } else {
-        const fieldIndex = parseInt(key.replace("additionalSuccess", ""), 10) - 1;
+        const fieldIndex =
+          parseInt(key.replace("additionalSuccess", ""), 10) - 1;
         if (fieldIndex !== indexToDelete) {
-          const newIndex = fieldIndex > indexToDelete ? fieldIndex - 1 : fieldIndex;
+          const newIndex =
+            fieldIndex > indexToDelete ? fieldIndex - 1 : fieldIndex;
           updatedErrors[`additionalSuccess${newIndex + 1}`] = errors[key]; // Переносим ошибки для дополнительных полей
         }
       }
     });
-  
+
     // 4. Обновляем конфигурацию валидации для оставшихся полей
     updateValidationConfig(updatedAdditionalInputs.length); // Передаем текущее количество оставшихся дополнительных полей
-  
+
     // 5. Обновляем состояние
     setAdditionalInputs(updatedAdditionalInputs);
     setData(newData);

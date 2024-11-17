@@ -1,14 +1,16 @@
 {
   "files": {
-    "main.css": "/onlineSuccessDiary/static/css/main.5cda0474.css",
-    "main.js": "/onlineSuccessDiary/static/js/main.9fd486f6.js",
+    "main.css": "/onlineSuccessDiary/static/css/main.f5d3aa38.css",
+    "main.js": "/onlineSuccessDiary/static/js/main.bf796752.js",
     "static/media/bg-white.jpg": "/onlineSuccessDiary/static/media/bg-white.9d339d2cd932f507fbca.jpg",
+    "static/media/bootstrap-icons.woff?": "/onlineSuccessDiary/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/onlineSuccessDiary/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
     "index.html": "/onlineSuccessDiary/index.html",
-    "main.5cda0474.css.map": "/onlineSuccessDiary/static/css/main.5cda0474.css.map",
-    "main.9fd486f6.js.map": "/onlineSuccessDiary/static/js/main.9fd486f6.js.map"
+    "main.f5d3aa38.css.map": "/onlineSuccessDiary/static/css/main.f5d3aa38.css.map",
+    "main.bf796752.js.map": "/onlineSuccessDiary/static/js/main.bf796752.js.map"
   },
   "entrypoints": [
-    "static/css/main.5cda0474.css",
-    "static/js/main.9fd486f6.js"
+    "static/css/main.f5d3aa38.css",
+    "static/js/main.bf796752.js"
   ]
 }
