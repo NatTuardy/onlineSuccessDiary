@@ -8,15 +8,26 @@ import SmallTitle from "./common/typografy/smallTitle";
 import getDate from "../utils/getDate";
 import TextField from "./common/form/textField"; // Импортируем TextField
 
+interface DayToEdit {
+  dateNow?: string;
+  successes1?: string;
+  successes2?: string;
+  successes3?: string;
+  successes4?: string;
+  successes5?: string;
+  [key: string]: any; // Для дополнительных успехов
+}
+
 const FormPage = () => {
   const location = useLocation();
-  const dayToEdit = location.state?.dayToEdit || {}; // Получаем день для редактирования
+  const dayToEdit =
+    (location.state as { dayToEdit?: DayToEdit })?.dayToEdit || {}; // Получаем день для редактирования
   const currentData = getDate(0);
   const navigate = useNavigate();
 
-  const [data, setData] = useState(() => {
+  const [data, setData] = useState<DayToEdit>(() => {
     // Заполняем обязательные поля успехов 1-5
-    const initialData = {
+    const initialData: DayToEdit = {
       dateNow: dayToEdit.dateNow || currentData, // Если редактируем день, то берем дату из dayToEdit, иначе - текущую дату
       successes1: dayToEdit.successes1 || "",
       successes2: dayToEdit.successes2 || "",
@@ -35,8 +46,10 @@ const FormPage = () => {
     return initialData;
   });
 
-  const [errors, setErrors] = useState({});
-  const [additionalInputs, setAdditionalInputs] = useState([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [additionalInputs, setAdditionalInputs] = useState<
+    { label: string; value: string }[]
+  >([]);
   const [validatorConfig, setValidatorConfig] = useState(validationConfig);
   const [daysDiary, setDaysDiary] = useState([]);
   const [existAlert, setExistAlert] = useState(false);
