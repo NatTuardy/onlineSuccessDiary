@@ -7,16 +7,8 @@ import Subtitle from "./common/typografy/subtitle";
 import SmallTitle from "./common/typografy/smallTitle";
 import getDate from "../utils/getDate";
 import TextField from "./common/form/textField"; // Импортируем TextField
+import { DayToEdit, ValidationConfig } from "../types/interfaces";
 
-interface DayToEdit {
-  dateNow?: string;
-  successes1?: string;
-  successes2?: string;
-  successes3?: string;
-  successes4?: string;
-  successes5?: string;
-  [key: string]: any; // Для дополнительных успехов
-}
 
 const FormPage = () => {
   const location = useLocation();
@@ -51,20 +43,22 @@ const FormPage = () => {
     { label: string; value: string }[]
   >([]);
   const [validatorConfig, setValidatorConfig] = useState(validationConfig);
-  const [daysDiary, setDaysDiary] = useState([]);
+  const [daysDiary, setDaysDiary] = useState<DayToEdit[]>([]);
   const [existAlert, setExistAlert] = useState(false);
-  const [touched, setTouched] = useState({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [updatedDay, setUpdatedDay] = useState(false);
 
   useEffect(() => {
-    const savedDays = [];
+    const savedDays: DayToEdit[] = [];
     // Перебираем все ключи в localStorage
     for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
+      const key: string | null = localStorage.key(i);
 
       // Отбираем только те ключи, которые начинаются с 'day' и имеют дату
-      if (key.startsWith("day") && /\d{8}/.test(key.replace("day", ""))) {
-        const savedDay = JSON.parse(window.localStorage.getItem(key));
+      if (key && key.startsWith("day") && /\d{8}/.test(key.replace("day", ""))) {
+        const savedDay = JSON.parse(
+          window.localStorage.getItem(key) || "{}"
+        ) as DayToEdit;
         if (savedDay) {
           savedDays.push(savedDay);
         }
@@ -73,14 +67,14 @@ const FormPage = () => {
     setDaysDiary(savedDays);
   }, []);
 
-  const validate = (formData) => {
-    const errors = validator(formData, validatorConfig);
+  const validate = (formData: DayToEdit) : boolean => {
+    const errors: Record<string, string> = validator(formData, validatorConfig);
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  const updateValidationConfig = (additionalFieldsCount) => {
-    const newValidatorConfig = { ...validationConfig }; // Базовый конфиг для обязательных полей
+  const updateValidationConfig = (additionalFieldsCount: number) => {
+    const newValidatorConfig: ValidationConfig = { ...validationConfig }; // Базовый конфиг для обязательных полей
 
     // Добавляем правила для обязательных полей успехов (1-5)
     for (let i = 1; i <= 5; i++) {
@@ -109,7 +103,7 @@ const FormPage = () => {
     // Проверяем, есть ли данные для редактирования
     if (dayToEdit && Object.keys(dayToEdit).length > 0) {
       // Находим все дополнительные успехи
-      const additionalSuccesses = Object.keys(dayToEdit).filter((key) =>
+      const additionalSuccesses: string[] = Object.keys(dayToEdit).filter((key) =>
         key.startsWith("additionalSuccess")
       );
 
@@ -120,7 +114,7 @@ const FormPage = () => {
         }))
       );
       // Обновляем данные для всех полей (основные и дополнительные успехи)
-      const updatedData = { ...data, ...dayToEdit };
+      const updatedData: DayToEdit = { ...data, ...dayToEdit };
       setData(updatedData);
       // Обновляем валидацию для всех полей, включая дополнительные
       updateValidationConfig(additionalSuccesses.length);
