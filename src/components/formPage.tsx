@@ -110,7 +110,7 @@ const FormPage = () => {
       setAdditionalInputs(
         additionalSuccesses.map((success, index) => ({
           label: `Успіх ${index + 6}`,
-          value: dayToEdit[success],
+          value: dayToEdit[success] || "",
         }))
       );
       // Обновляем данные для всех полей (основные и дополнительные успехи)
@@ -122,7 +122,7 @@ const FormPage = () => {
     }
   }, [dayToEdit]); // Этот useEffect срабатывает при изменении dayToEdit и длины additionalInputs
 
-  const handleChange = ({ name, value }) => {
+  const handleChange = ({ name, value } : {name: keyof DayToEdit, value: string}) => {
     // 1. Обновляем состояние данных
     setData((prevState) => ({
       ...prevState,
@@ -151,7 +151,7 @@ const FormPage = () => {
     );
 
     // 4. Проверяем только предыдущие обязательные поля
-    const fieldOrder = [
+    const fieldOrder: (keyof DayToEdit)[] = [
       "successes1",
       "successes2",
       "successes3",
@@ -163,7 +163,8 @@ const FormPage = () => {
 
     if (currentFieldIndex > 0) {
       for (let i = 0; i < currentFieldIndex; i++) {
-        const field = fieldOrder[i];
+        // Это избыточная проверка, TypeScript уже знает, что field имеет тип keyof DayToEdit
+        const field: keyof DayToEdit = fieldOrder[i];
         if (!data[field] && !touched[field]) {
           // Отмечаем как "тронутое" и валидируем только предыдущие поля
           setTouched((prevState) => ({
@@ -175,7 +176,7 @@ const FormPage = () => {
     }
 
     // 5. Если поле — это дополнительный импут, обновляем валидацию через updateValidationConfig
-    if (name.startsWith("additionalSuccess")) {
+    if ((name as string).startsWith("additionalSuccess")) {
       const additionalFieldsCount = Object.keys(data).filter((key) =>
         key.startsWith("additionalSuccess")
       ).length;
@@ -187,27 +188,27 @@ const FormPage = () => {
     setErrors(updatedErrors);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValid = validate(data);
 
     // Если форма невалидна, отмечаем все поля как "тронутые"
     if (!isValid) {
-      const allTouched = {};
+      const allTouched: Record<keyof DayToEdit, boolean> = {};
       for (let fieldName in data) {
-        allTouched[fieldName] = true;
+        allTouched[fieldName as keyof DayToEdit] = true;
       }
       setTouched(allTouched);
       return;
     }
 
     // Генерируем уникальный ключ на основе текущей даты
-    const formattedDate = data.dateNow.replace(/\./g, ""); // Преобразуем дату в формат YYMMDD
+    const formattedDate = (data.dateNow as string).replace(/\./g, ""); // Преобразуем дату в формат YYMMDD
     const uniqueDayKey = `day${formattedDate}`;
 
     // Проверяем, редактируем ли мы существующий день
-    const existingDayIndex = daysDiary.findIndex(
+    const existingDayIndex: number = daysDiary.findIndex(
       (day) => day.dateNow === data.dateNow
     );
 
@@ -236,13 +237,13 @@ const FormPage = () => {
     navigate("/days"); // Возвращаемся на страницу списка дней
   };
 
-  const allMandatoryFieldsFilled = () => {
+  const allMandatoryFieldsFilled = (): boolean => {
     return (
-      data.successes1 &&
-      data.successes2 &&
-      data.successes3 &&
-      data.successes4 &&
-      data.successes5
+      !!data.successes1 &&
+      !!data.successes2 &&
+      !!data.successes3 &&
+      !!data.successes4 &&
+      !!data.successes5
     );
   };
 
